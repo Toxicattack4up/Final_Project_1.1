@@ -137,6 +137,11 @@
     <ClInclude Include="Chat.h" />
     <ClInclude Include="Menu.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="login.txt" />
+    <Text Include="Name.txt" />
+    <Text Include="password.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

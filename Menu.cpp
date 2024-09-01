@@ -3,7 +3,7 @@
 
 int Menu::RunMenu()
 {
-    int punkt;
+    int choice;
     bool exit = false;
     do
     {
@@ -11,9 +11,9 @@ int Menu::RunMenu()
         cout << "1.Вход" << endl;
         cout << "2.Регистрация" << endl;
         cout << "3.Выход" << endl;
-        cin >> punkt;
+        cin >> choice;
 
-        switch (punkt)
+        switch (choice)
         {
         case 1:
         {
@@ -23,7 +23,6 @@ int Menu::RunMenu()
             Menu::UserMenu();
             break;
         }
-
         case 2:
         {
             system("cls");
@@ -45,7 +44,7 @@ int Menu::RunMenu()
 
 int Menu::UserMenu()
 {
-    int punkt = 0;
+    int choice = 0;
     do
     {
         cout << " Вы в меню пользователя" << endl;
@@ -53,14 +52,16 @@ int Menu::UserMenu()
         cout << "1. Отправить сообщение одному пользователю" << endl;
         cout << "2. Отправить сообщение всем пользователям" << endl;
         cout << "3. Продолжить чат с пользователем" << endl;
-        cin >> punkt;
+        cin >> choice;
 
-        switch (punkt)
+        switch (choice)
         {
         case 1:
             One_message();
             break;
         case 2:
+            Chat chat;
+            chat.Print_All_message();
             break;
         case 3:
             break;
@@ -76,6 +77,7 @@ int Menu::One_message()
     cout << "Выберите кому хотите написать из списка ниже" << endl;
     Chat chat;
     chat.User_Choice();
+    ///
     return 0;
 }
 

@@ -58,8 +58,8 @@ void Account::Entrance()
 {
     LoadCredentials();  // Загрузка логинов и паролей из файлов в хеш-таблицу
 
-    string login_correct, pass_correct, name_correct;
-    cout << "Введите свой логин: "; cin >> login_correct;
+    string login_correct, pass_correct;
+    cout << "Введите свой логин: "; cin >> login_correct; 
     cout << "Введите свой пароль: "; cin >> pass_correct;
 
     // Проверка логина и пароля в хеш-таблице
@@ -71,6 +71,7 @@ void Account::Entrance()
     {
         cerr << "Пароль или логин введен неправильно!" << endl;
     }
+    // Надо чето ещё добавить 
 }
 
 // Регистрация пользователя
@@ -79,23 +80,21 @@ void Account::Sign_up()
     LoadCredentials();  // Загрузка логинов и паролей из файлов в хеш-таблицу
 
     string log_cheker, pass_cheker, name_cheker;
-    cout << "Введите своё имя: "; cin >> name_cheker;
     cout << "Введите свой логин: "; cin >> log_cheker;
-    cout << "Введите свой пароль: "; cin >> pass_cheker;
-
     // Проверка, существует ли логин уже
     if (credentials.find(log_cheker) != credentials.end())
     {
         cerr << "Такой логин уже существует!" << endl;
+        return;
     }
-    else
-    {
-        User user;
-        user.name = name_cheker;
-        user.password = pass_cheker;
-        // Добавление нового пользователя в хеш-таблицу и сохранение изменений в файлы
-        credentials[log_cheker] = user;
-        SaveCredentials();
-        cout << "Регистрация прошла успешно!" << endl;
-    }
+    cout << "Введите свой пароль: "; cin >> pass_cheker;
+    cout << "Введите своё имя: "; cin >> name_cheker;
+
+    User user;
+    user.name = name_cheker;
+    user.password = pass_cheker;
+    // Добавление нового пользователя в хеш-таблицу и сохранение изменений в файлы
+    credentials[log_cheker] = user;
+    SaveCredentials();
+    cout << "Регистрация прошла успешно!" << endl;
 }

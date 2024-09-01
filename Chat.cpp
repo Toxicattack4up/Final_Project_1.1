@@ -18,7 +18,7 @@ void Chat::Users()
 
 void Chat::Read_message(string& filename)
 {
-	while (running)
+	/*while (running)
 	{
 		ifstream infile(filename);
 		if (infile.is_open())
@@ -31,12 +31,12 @@ void Chat::Read_message(string& filename)
 			infile.close();
 		}
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-	}
+	}*/
 }
 
 void Chat::Send_message(std::string& filename)
 {
-	while (running)
+	/*while (running)
 	{
 		string massage;
 		getline(cin, massage);
@@ -46,6 +46,56 @@ void Chat::Send_message(std::string& filename)
 			outfile << massage << endl;
 			outfile.close();
 		}
+	}*/
+}
+
+void Chat::Print_All_message()
+{
+	setlocale(LC_ALL, "Russian");
+	locale::global(locale("Russian"));
+	vector<string> messages;
+	string line;
+	// Открыли файл для отправки всем
+	ifstream all_message("All_message.txt");
+	if (!all_message.is_open())
+	{
+		cerr << "Ошибка: не удалось открыть";
+	}
+	// Цикл для записи из файла в вектор и последующим выводом чата
+	while (getline(all_message, line))
+	{
+		messages.push_back(line);
+	}
+	all_message.close();
+
+	for (const auto& message : messages)
+	{
+		cout << message << endl;
+	}
+
+	cout << "Введите сообщение для всех: ";
+	cin.ignore();  // Игнорируем остаток от предыдущего ввода
+	getline(cin, line);  // Используем getline для получения строки с пробелами
+
+	// Добавляем новое сообщение в вектор
+	messages.push_back(line);
+
+	// Открываем файл для записи в конец (append)
+	ofstream out_message("All_message.txt", ios::app);
+	if (!out_message.is_open())
+	{
+		cerr << "Ошибка: не удалось открыть файл для записи" << endl;
+		return;
+	}
+
+	// Записываем новое сообщение в файл
+	out_message << line << endl;
+	out_message.close();
+
+	// Выводим все сообщения, включая новое
+	for (const auto& message : messages)
+	{
+		cout << message << endl;
 	}
 }
 
