@@ -1,7 +1,6 @@
 #include "Account.h"
 
 
-// Функция для загрузки данных из файлов в хеш-таблицу
 void Account::LoadCredentials()
 {
     ifstream log("login.txt");
@@ -10,7 +9,7 @@ void Account::LoadCredentials()
 
     if (!log.is_open() || !pass.is_open() || !name.is_open())
     {
-        cerr << "Ошибка при открытии файлов!" << endl;
+        cerr << "РљР°РєР°СЏ-С‚Рѕ РѕС€РёР±РєР°!" << endl;
         return;
     }
 
@@ -28,7 +27,6 @@ void Account::LoadCredentials()
     name.close();
 }
 
-// Функция для сохранения данных из хеш-таблицы в файлы
 void Account::SaveCredentials()
 {
     ofstream log("login.txt");
@@ -37,7 +35,7 @@ void Account::SaveCredentials()
 
     if (!log.is_open() || !pass.is_open() || !name.is_open())
     {
-        cerr << "Ошибка при открытии файлов!" << endl;
+        cerr << "РљР°РєР°СЏ-С‚Рѕ РѕС€РёР±РєР°!" << endl;
         return;
     }
 
@@ -53,48 +51,42 @@ void Account::SaveCredentials()
     name.close();
 }
 
-// Вход пользователя
 void Account::Entrance()
 {
-    LoadCredentials();  // Загрузка логинов и паролей из файлов в хеш-таблицу
+    LoadCredentials();
 
     string login_correct, pass_correct;
-    cout << "Введите свой логин: "; cin >> login_correct; 
-    cout << "Введите свой пароль: "; cin >> pass_correct;
+    cout << "Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ: "; cin >> login_correct; 
+    cout << "Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ: "; cin >> pass_correct;
 
-    // Проверка логина и пароля в хеш-таблице
     if (credentials.find(login_correct) != credentials.end() && credentials[login_correct].password == pass_correct)
     {
-        cout << "Данные введены верно!" << endl;
+        cout << "Р’С‹ СѓСЃРїРµС€РЅРѕ Р°РІС‚РѕСЂРёР·РѕРІР°Р»РёСЃСЊ!" << endl;
     }
     else
     {
-        cerr << "Пароль или логин введен неправильно!" << endl;
+        cerr << "РљР°РєР°СЏ-С‚Рѕ РѕС€РёР±РєР°!" << endl;
     }
-    // Надо чето ещё добавить 
 }
 
-// Регистрация пользователя
 void Account::Sign_up()
 {
-    LoadCredentials();  // Загрузка логинов и паролей из файлов в хеш-таблицу
+    LoadCredentials();
 
     string log_cheker, pass_cheker, name_cheker;
-    cout << "Введите свой логин: "; cin >> log_cheker;
-    // Проверка, существует ли логин уже
+    cout << "Р’РІРµРґРёС‚Рµ РІР°С€ Р»РѕРіРёРЅ: "; cin >> log_cheker;
     if (credentials.find(log_cheker) != credentials.end())
     {
-        cerr << "Такой логин уже существует!" << endl;
+        cerr << "РўР°РєРѕР№ Р»РѕРіРёРЅ Р·Р°РЅСЏС‚ РІРІРµРґРёС‚Рµ РґСЂСѓРіРѕР№!" << endl;
         return;
     }
-    cout << "Введите свой пароль: "; cin >> pass_cheker;
-    cout << "Введите своё имя: "; cin >> name_cheker;
+    cout << "Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ: "; cin >> pass_cheker;
+    cout << "Р’РІРµРґРёС‚Рµ РІР°С€Рµ РёРјСЏ: "; cin >> name_cheker;
 
     User user;
     user.name = name_cheker;
     user.password = pass_cheker;
-    // Добавление нового пользователя в хеш-таблицу и сохранение изменений в файлы
     credentials[log_cheker] = user;
     SaveCredentials();
-    cout << "Регистрация прошла успешно!" << endl;
+    cout << "Р’С‹ СѓСЃРїРµС€РЅРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅС‹!" << endl;
 }

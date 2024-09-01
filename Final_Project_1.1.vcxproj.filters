@@ -39,9 +39,4 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Name.txt" />
-    <Text Include="password.txt" />
-    <Text Include="login.txt" />
-  </ItemGroup>
 </Project>

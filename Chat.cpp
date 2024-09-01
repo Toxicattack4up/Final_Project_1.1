@@ -5,7 +5,7 @@ void Chat::Users()
 	ifstream name("Name.txt");
 	if (!name.is_open())
 	{
-		cerr << "Ошибка: файл не удалось открыть в Users";
+		cerr << "РћС€РёР±РєР°: РЅРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» РІ С„СѓРЅРє Users";
 		return;
 	}
 
@@ -26,7 +26,7 @@ void Chat::Read_message(string& filename)
 			string massege;
 			while (getline(infile, massege))
 			{
-				cout << "Введите сообщение: " << massege << endl;
+				cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: " << massege << endl;
 			}
 			infile.close();
 		}
@@ -51,17 +51,14 @@ void Chat::Send_message(std::string& filename)
 
 void Chat::Print_All_message()
 {
-	setlocale(LC_ALL, "Russian");
-	locale::global(locale("Russian"));
 	vector<string> messages;
 	string line;
-	// Открыли файл для отправки всем
+
 	ifstream all_message("All_message.txt");
 	if (!all_message.is_open())
 	{
-		cerr << "Ошибка: не удалось открыть";
+		cerr << "РћС€РёР±РєР°: С„Р°Р№Р» РЅРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ";
 	}
-	// Цикл для записи из файла в вектор и последующим выводом чата
 	while (getline(all_message, line))
 	{
 		messages.push_back(line);
@@ -73,30 +70,31 @@ void Chat::Print_All_message()
 		cout << message << endl;
 	}
 
-	cout << "Введите сообщение для всех: ";
-	cin.ignore();  // Игнорируем остаток от предыдущего ввода
-	getline(cin, line);  // Используем getline для получения строки с пробелами
+	cout << "Р’РІРµРґРёС‚Рµ СЃРѕРѕР±С‰РµРЅРёРµ РІСЃРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРј: ";
+	cin.ignore();
+	getline(cin, line);
 
-	// Добавляем новое сообщение в вектор
 	messages.push_back(line);
 
-	// Открываем файл для записи в конец (append)
 	ofstream out_message("All_message.txt", ios::app);
 	if (!out_message.is_open())
 	{
-		cerr << "Ошибка: не удалось открыть файл для записи" << endl;
+		cerr << "РћС€РёР±РєР°: РЅРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р»" << endl;
 		return;
 	}
 
-	// Записываем новое сообщение в файл
 	out_message << line << endl;
 	out_message.close();
 
-	// Выводим все сообщения, включая новое
 	for (const auto& message : messages)
 	{
 		cout << message << endl;
 	}
+}
+
+void Chat::Send_All_message()
+{
+
 }
 
 void Chat::User_Choice()
@@ -105,7 +103,7 @@ void Chat::User_Choice()
 	ifstream name("Name.txt", ios::in);
 	if (!name.is_open())
 	{
-		cerr << "Ошибка: не удалось открыть файл в User_Choice" << endl;
+		cerr << "РћС€РёР±РєР°: РЅРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р» User_Choice" << endl;
 		return;
 	}
 
@@ -116,7 +114,7 @@ void Chat::User_Choice()
 	}
 	name.close();
 
-	cout << "Список пользователей:" << endl;
+	cout << "РРјРµРЅР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№:" << endl;
 
 	int i = 1;
 	for (const auto& user : Users)
@@ -126,14 +124,14 @@ void Chat::User_Choice()
 	}
 
 	int choice;
-	cout << "Введите имя пользователя: ";
+	cout << "Р’С‹Р±РµСЂРёС‚Рµ РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ: ";
 	cin >> choice;
 	if (choice < 1 || choice > Users.size())
 	{
-		cerr << "Ошибка: неверное имя пользователя" << endl;
+		cerr << "РћС€РёР±РєР°: С‚Р°РєРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚" << endl;
 		return;
 	}
 
 	string selectedUser = Users[choice - 1];
-	cout << "Вы выбрали пользователя: " << selectedUser << endl;
+	cout << "РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, РєРѕС‚РѕСЂРѕРіРѕ РІС‹ РІС‹Р±СЂР°Р»Рё: " << selectedUser << endl;
 }
