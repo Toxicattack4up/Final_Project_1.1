@@ -18,7 +18,9 @@ class Account
 private:
     unordered_map<string, User> credentials;
     void LoadCredentials();
+    void LoadUserInfo();
     void SaveCredentials();
+    void SaveUserInfo(const string& login, const string& nickname, const string& name);
 
 public:
     void Authorization();

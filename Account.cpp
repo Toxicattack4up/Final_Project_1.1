@@ -3,52 +3,78 @@
 
 void Account::LoadCredentials()
 {
-    ifstream log("login.txt");
-    ifstream pass("password.txt");
-    ifstream name("Name.txt");
+    ifstream cred_file("credentials.txt");
 
-    if (!log.is_open() || !pass.is_open() || !name.is_open())
+    if (!cred_file.is_open())
     {
-        cerr << "Ошибка: не удалось открыть один из файлов!" << endl;
+        cerr << "Ошибка: не удалось открыть файл для чтения" << endl;
         return;
     }
 
-    string login, password, username;
-    while (log >> login && pass >> password && name >> username)
+    string login, password;
+    while (cred_file >> login >> password)
     {
         User user;
-        user.name = username;
         user.password = password;
         credentials[login] = user;
     }
 
-    log.close();
-    pass.close();
-    name.close();
+    cred_file.close();
 }
+
+void Account::LoadUserInfo()
+{
+    ifstream user_info_file("user_info.txt");
+
+    if (!user_info_file.is_open())
+    {
+        cerr << "Ошибка: не удалось открыть файл для чтения" << endl;
+        return;
+    }
+
+    string login, nickname, name;
+    while (user_info_file >> login >> nickname >> name)
+    {
+        if (credentials.find(login) != credentials.end())
+        {
+            credentials[login].nickname = nickname;
+            credentials[login].name = name;
+        }
+    }
+
+    user_info_file.close();
+}
+
 
 void Account::SaveCredentials()
 {
-    ofstream log("login.txt");
-    ofstream pass("password.txt");
-    ofstream name("Name.txt");
+    ofstream cred_file("credentials.txt");
 
-    if (!log.is_open() || !pass.is_open() || !name.is_open())
+    if (!cred_file.is_open())
     {
-        cerr << "Ошибка: не удалось открыть один из файлов!" << endl;
+        cerr << "Ошибка: не удалось открыть файл для записи!" << endl;
         return;
     }
 
     for (const auto& pair : credentials)
     {
-        log << pair.first << endl;
-        pass << pair.second.password << endl;
-        name << pair.second.name << endl;
+        cred_file << pair.first << " " << pair.second.password << endl;
+    }
+}
+
+void Account::SaveUserInfo(const string& login, const string& nickname, const string& name)
+{
+    ofstream user_info_file("user_info.txt", ios::app);
+
+    if (!user_info_file.is_open())
+    {
+        cerr << "Ошибка: не удалось открыть файл для записи" << endl;
+        return;
     }
 
-    log.close();
-    pass.close();
-    name.close();
+    user_info_file << login << " " << nickname << " " << name << endl;
+
+    user_info_file.close();
 }
 
 void Account::Authorization()
@@ -115,73 +141,91 @@ void Account::Registration()
 {
     LoadCredentials();
 
-    string log_checker, pass_checker, name_checker;
+    string login, password, nickname, name;
     bool validInput = false;
 
     // Цикл для ввода логина
     while (!validInput)
     {
-        cout << "Введите ваш логин: "; cin >> log_checker;
+        cout << "Введите ваш логин: "; cin >> login;
 
-        if (log_checker.empty() || log_checker.find(' ') != string::npos)
+        if (login.empty() || login.find(' ') != string::npos)
         {
             cerr << "Логин не должен быть пустым или содержать пробелы!" << endl;
         }
-        else if (credentials.find(log_checker) != credentials.end())
+        else if (credentials.find(login) != credentials.end())
         {
             cerr << "Такой логин занят, введите другой!" << endl;
         }
         else
         {
-            validInput = true;  // Логин прошел все проверки
+            validInput = true;  // Точка выхода
         }
     }
 
     validInput = false;
-
     // Цикл для ввода пароля
     while (!validInput)
     {
-        cout << "Введите пароль: ";
-        // Вместо cin можно использовать безопасный ввод пароля
-        cin >> pass_checker;
+        cout << "Введите пароль: "; cin >> password;
 
-        if (pass_checker.length() < 8)
+        if (password.length() < 8)
         {
             cerr << "Пароль должен содержать как минимум 8 символов!" << endl;
         }
         else
         {
-            validInput = true;  // Пароль прошел все проверки
+            validInput = true;  // Точка выхода
         }
     }
+    validInput = false; // Обнуление
 
-    // Цикл для ввода имени
-    validInput = false;
+    // Цикл для ввода ника
     while (!validInput)
     {
-        cout << "Введите ваше имя: ";
-        cin >> name_checker;
+        cout << "Введите ваш ник: " << endl; cin >> nickname;
 
-        if (name_checker.empty())
+        if (nickname.empty() || nickname.find(' ') != string::npos)
         {
-            cerr << "Имя не должно быть пустым!" << endl;
+            cerr << "Ник не должен быть пустым или содержать пробелы!" << endl;
+            return;
+        }
+        else if (credentials.find(nickname) != credentials.end())
+        {
+            cout << "Такой ник уже занят, введите другой!" << endl;
         }
         else
         {
-            validInput = true;  // Имя прошло все проверки
+            validInput = true;  // Точка выхода
+        }
+    }
+    validInput = false;
+    // Цикл для ввода имени
+    while (!validInput)
+    {
+        cout << "Введите ваше имя: ";
+        cin >> name;
+
+        if (name.empty() || name.find(' ') != string::npos)
+        {
+            cerr << "Имя не должно быть пустым или содержать пробелы!" << endl;
+        }
+        else
+        {
+            validInput = true;   // Точка выхода
         }
     }
 
     User user;
-    user.name = name_checker;
-    user.password = pass_checker;
+    user.name = name;
+    user.password = password;
 
-    credentials[log_checker] = user;
+    credentials[login] = user;
 
     try
     {
         SaveCredentials();
+        SaveUserInfo(login, nickname, name);
     }
     catch (const exception& e)
     {
