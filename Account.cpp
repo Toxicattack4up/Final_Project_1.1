@@ -81,19 +81,19 @@ void Account::Authorization()
 {
     LoadCredentials();
 
-    string login_correct, pass_correct;
+    string login, password;
     bool validInput = false;
 
     while (!validInput)
     {
         cout << "Введите логин: ";
-        cin >> login_correct;
+        cin >> login;
 
-        if (login_correct.empty())
+        if (login.empty())
         {
             cerr << "Логин не должен быть пустым!" << endl;
         }
-        else if (credentials.find(login_correct) == credentials.end())
+        else if (credentials.find(login) == credentials.end())
         {
             cerr << "Логин не найден! Попробуйте снова." << endl;
         }
@@ -104,23 +104,22 @@ void Account::Authorization()
     }
 
     validInput = false;
-    auto it = credentials.find(login_correct);
+    auto it = credentials.find(login);
 
     if (it != credentials.end())
     {
         while (!validInput)
         {
             cout << "Введите пароль: ";
-            cin >> pass_correct;
+            cin >> password;
 
-            if (pass_correct.empty())
+            if (password.empty())
             {
                 cerr << "Пароль не должен быть пустым!" << endl;
                 continue; // Возвращаемся в начало цикла
             }
 
-            // Проверка пароля (предполагается, что используется хеширование)
-            if (it->second.password == pass_correct) // Здесь заменить на сравнение хешей
+            if (it->second.password == password) // Здесь заменить на сравнение хешей
             {
                 cout << "Вы успешно авторизовались!" << endl;
                 validInput = true; // Устанавливаем флаг, чтобы выйти из цикла
