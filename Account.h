@@ -11,6 +11,7 @@ struct User
 {
     string name;
     string password;
+    string nickname;
 };
 
 class Account
