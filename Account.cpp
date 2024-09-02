@@ -86,9 +86,8 @@ void Account::Authorization()
 
     while (!validInput)
     {
-        cout << "Введите логин: ";
-        cin >> login;
-
+        cout << "Введите логин: "; cin >> login;
+        
         if (login.empty())
         {
             cerr << "Логин не должен быть пустым!" << endl;
@@ -110,8 +109,7 @@ void Account::Authorization()
     {
         while (!validInput)
         {
-            cout << "Введите пароль: ";
-            cin >> password;
+            cout << "Введите пароль: "; cin >> password;
 
             if (password.empty())
             {
@@ -182,7 +180,7 @@ void Account::Registration()
     // Цикл для ввода ника
     while (!validInput)
     {
-        cout << "Введите ваш ник: " << endl; cin >> nickname;
+        cout << "Введите ваш ник: "; cin >> nickname;
 
         if (nickname.empty() || nickname.find(' ') != string::npos)
         {
