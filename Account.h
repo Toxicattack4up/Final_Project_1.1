@@ -21,6 +21,6 @@ private:
     void SaveCredentials();
 
 public:
-    void Entrance();
-    void Sign_up();
+    void Authorization();
+    void Registration();
 };

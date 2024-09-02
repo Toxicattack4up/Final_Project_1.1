@@ -14,7 +14,6 @@
 
 int main()
 {
-    setlocale(LC_ALL, "");
     Menu menu;
     menu.RunMenu();
 }

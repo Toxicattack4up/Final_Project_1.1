@@ -51,42 +51,126 @@ void Account::SaveCredentials()
     name.close();
 }
 
-void Account::Entrance()
+void Account::Authorization()
 {
     LoadCredentials();
 
     string login_correct, pass_correct;
-    cout << "Введите логин: "; cin >> login_correct; 
-    cout << "Введите пароль: "; cin >> pass_correct;
+    cout << "Введите логин: "; cin >> login_correct;
 
-    if (credentials.find(login_correct) != credentials.end() && credentials[login_correct].password == pass_correct)
+    if (login_correct.empty())
     {
-        cout << "Вы успешно авторизовались!" << endl;
+        cerr << "Логин не должен быть пустым!" << endl;
+        return;
+    }
+
+    cout << "Введите пароль: ";
+    cin >> pass_correct;
+
+    if (pass_correct.empty())
+    {
+        cerr << "Пароль не должен быть пустым!" << endl;
+        return;
+    }
+
+    auto it = credentials.find(login_correct);
+    if (it != credentials.end())
+    {
+        // Проверка пароля (здесь нужно будет сравнивать хеши)
+        if (it->second.password == pass_correct) // Заменить это на сравнение хешей
+        {
+            cout << "Вы успешно авторизовались!" << endl;
+        }
+        else
+        {
+            cerr << "Неправильный пароль!" << endl;
+        }
     }
     else
     {
-        cerr << "Какая-то ошибка!" << endl;
+        cerr << "Логин не найден!" << endl;
     }
 }
 
-void Account::Sign_up()
+void Account::Registration()
 {
     LoadCredentials();
 
-    string log_cheker, pass_cheker, name_cheker;
-    cout << "Введите ваш логин: "; cin >> log_cheker;
-    if (credentials.find(log_cheker) != credentials.end())
+    string log_checker, pass_checker, name_checker;
+    bool validInput = false;
+
+    // Цикл для ввода логина
+    while (!validInput)
     {
-        cerr << "Такой логин занят введите другой!" << endl;
-        return;
+        cout << "Введите ваш логин: ";
+        cin >> log_checker;
+
+        if (log_checker.empty() || log_checker.find(' ') != string::npos)
+        {
+            cerr << "Логин не должен быть пустым или содержать пробелы!" << endl;
+        }
+        else if (credentials.find(log_checker) != credentials.end())
+        {
+            cerr << "Такой логин занят, введите другой!" << endl;
+        }
+        else
+        {
+            validInput = true;  // Логин прошел все проверки
+        }
     }
-    cout << "Введите пароль: "; cin >> pass_cheker;
-    cout << "Введите ваше имя: "; cin >> name_cheker;
+
+    // Сброс флага для проверки пароля
+    validInput = false;
+
+    // Цикл для ввода пароля
+    while (!validInput)
+    {
+        cout << "Введите пароль: ";
+        // Вместо cin можно использовать безопасный ввод пароля
+        cin >> pass_checker;
+
+        if (pass_checker.length() < 8)
+        {
+            cerr << "Пароль должен содержать как минимум 8 символов!" << endl;
+        }
+        else
+        {
+            validInput = true;  // Пароль прошел все проверки
+        }
+    }
+
+    // Цикл для ввода имени
+    validInput = false;
+    while (!validInput)
+    {
+        cout << "Введите ваше имя: ";
+        cin >> name_checker;
+
+        if (name_checker.empty())
+        {
+            cerr << "Имя не должно быть пустым!" << endl;
+        }
+        else
+        {
+            validInput = true;  // Имя прошло все проверки
+        }
+    }
 
     User user;
-    user.name = name_cheker;
-    user.password = pass_cheker;
-    credentials[log_cheker] = user;
-    SaveCredentials();
+    user.name = name_checker;
+    user.password = pass_checker;
+
+    credentials[log_checker] = user;
+
+    try
+    {
+        SaveCredentials();
+    }
+    catch (const exception& e)
+    {
+        cerr << "Ошибка сохранения данных: " << e.what() << endl;
+        return;
+    }
+
     cout << "Вы успешно зарегистрированы!" << endl;
 }

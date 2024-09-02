@@ -19,7 +19,7 @@ int Menu::RunMenu()
         {
             system("cls");
             Account account;
-            account.Entrance();
+            account.Authorization();
             Menu::UserMenu();
             break;
         }
@@ -27,7 +27,7 @@ int Menu::RunMenu()
         {
             system("cls");
             Account account;
-            account.Sign_up();
+            account.Registration();
             break;
         }
         case 3:
