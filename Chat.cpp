@@ -57,8 +57,10 @@ void Chat::Print_All_message()
 	ifstream all_message("All_message.txt");
 	if (!all_message.is_open())
 	{
-		cerr << "Ошибка: файл не удалось открыть";
+		cerr << "Ошибка: файл не удалось открыть" << endl;
+		return;
 	}
+
 	while (getline(all_message, line))
 	{
 		messages.push_back(line);
@@ -69,12 +71,15 @@ void Chat::Print_All_message()
 	{
 		cout << message << endl;
 	}
+}
+
+void Chat::Send_All_message()
+{
+	string line;
 
 	cout << "Введите сообщение всем пользователям: ";
 	cin.ignore();
 	getline(cin, line);
-
-	messages.push_back(line);
 
 	ofstream out_message("All_message.txt", ios::app);
 	if (!out_message.is_open())
@@ -85,16 +90,6 @@ void Chat::Print_All_message()
 
 	out_message << line << endl;
 	out_message.close();
-
-	for (const auto& message : messages)
-	{
-		cout << message << endl;
-	}
-}
-
-void Chat::Send_All_message()
-{
-
 }
 
 void Chat::User_Choice()

@@ -45,13 +45,15 @@ int Menu::RunMenu()
 int Menu::UserMenu()
 {
     int choice = 0;
+    bool exit = false;
     do
     {
-        cout << "Добро пожаловать!" << endl;
+        cout << " " << endl;
         cout << "Выберите что хотите сделать" << endl;
         cout << "1. Отправка сообщения конкретному пользователю" << endl;
-        cout << "2. Отправка сообщения всем пользователям" << endl;
-        cout << "3. Посмотреть с кем уже есть чат" << endl;
+        cout << "2. Сообщения для всех пользователей" << endl;
+        cout << "3. Посмотреть свои чаты" << endl;
+        cout << "4. Выход" << endl;
         cin >> choice;
 
         switch (choice)
@@ -60,12 +62,17 @@ int Menu::UserMenu()
             One_message();
             break;
         case 2:
-            Chat chat;
-            chat.Print_All_message();
+            All_message();
             break;
         case 3:
+
+            break;
+        case 4:
+            exit = true;
             break;
         default:
+            cout << "Вы сделали недопустимый выбор!" << endl;
+            continue;
             break;
         }
     } while (!exit);
@@ -82,5 +89,37 @@ int Menu::One_message()
 
 int Menu::All_message()
 {
+    int choice = 0;
+    bool exit = false;
+    do
+    {
+        cout << " " << endl;
+        cout << "Сообщения из общего чата" << endl;
+        Chat chat;
+        chat.Print_All_message();
+
+        cout << "Выберите что нужно сделать: " << endl;
+        cout << "1. Написать всем сообщение" << endl;
+        cout << "2. Вернуться в предыдущее меню" << endl;
+        cout << "3. Выход из приложения" << endl;
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            chat.Send_All_message();
+            break;
+        case 2:
+            UserMenu();
+        case 3:
+            exit = true;
+            break;
+        default:
+            cout << "Вы сделали недопустимый выбор!" << endl;
+            continue;
+            break;
+        }
+    } while (!exit);
+    
     return 0;
 };

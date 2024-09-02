@@ -9,7 +9,7 @@ void Account::LoadCredentials()
 
     if (!log.is_open() || !pass.is_open() || !name.is_open())
     {
-        cerr << "Какая-то ошибка!" << endl;
+        cerr << "Ошибка: не удалось открыть один из файлов!" << endl;
         return;
     }
 
@@ -35,7 +35,7 @@ void Account::SaveCredentials()
 
     if (!log.is_open() || !pass.is_open() || !name.is_open())
     {
-        cerr << "Какая-то ошибка!" << endl;
+        cerr << "Ошибка: не удалось открыть один из файлов!" << endl;
         return;
     }
 
@@ -56,34 +56,53 @@ void Account::Authorization()
     LoadCredentials();
 
     string login_correct, pass_correct;
-    cout << "Введите логин: "; cin >> login_correct;
+    bool validInput = false;
 
-    if (login_correct.empty())
+    while (!validInput)
     {
-        cerr << "Логин не должен быть пустым!" << endl;
-        return;
-    }
+        cout << "Введите логин: ";
+        cin >> login_correct;
 
-    cout << "Введите пароль: ";
-    cin >> pass_correct;
-
-    if (pass_correct.empty())
-    {
-        cerr << "Пароль не должен быть пустым!" << endl;
-        return;
-    }
-
-    auto it = credentials.find(login_correct);
-    if (it != credentials.end())
-    {
-        // Проверка пароля (здесь нужно будет сравнивать хеши)
-        if (it->second.password == pass_correct) // Заменить это на сравнение хешей
+        if (login_correct.empty())
         {
-            cout << "Вы успешно авторизовались!" << endl;
+            cerr << "Логин не должен быть пустым!" << endl;
+        }
+        else if (credentials.find(login_correct) == credentials.end())
+        {
+            cerr << "Логин не найден! Попробуйте снова." << endl;
         }
         else
         {
-            cerr << "Неправильный пароль!" << endl;
+            validInput = true; // Логин прошел все проверки, выход из цикла
+        }
+    }
+
+    validInput = false;
+    auto it = credentials.find(login_correct);
+
+    if (it != credentials.end())
+    {
+        while (!validInput)
+        {
+            cout << "Введите пароль: ";
+            cin >> pass_correct;
+
+            if (pass_correct.empty())
+            {
+                cerr << "Пароль не должен быть пустым!" << endl;
+                continue; // Возвращаемся в начало цикла
+            }
+
+            // Проверка пароля (предполагается, что используется хеширование)
+            if (it->second.password == pass_correct) // Здесь заменить на сравнение хешей
+            {
+                cout << "Вы успешно авторизовались!" << endl;
+                validInput = true; // Устанавливаем флаг, чтобы выйти из цикла
+            }
+            else
+            {
+                cerr << "Неправильный пароль! Попробуйте снова." << endl;
+            }
         }
     }
     else
@@ -102,8 +121,7 @@ void Account::Registration()
     // Цикл для ввода логина
     while (!validInput)
     {
-        cout << "Введите ваш логин: ";
-        cin >> log_checker;
+        cout << "Введите ваш логин: "; cin >> log_checker;
 
         if (log_checker.empty() || log_checker.find(' ') != string::npos)
         {
@@ -119,7 +137,6 @@ void Account::Registration()
         }
     }
 
-    // Сброс флага для проверки пароля
     validInput = false;
 
     // Цикл для ввода пароля
