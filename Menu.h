@@ -8,7 +8,6 @@ public:
 	int RunMenu();
 	int UserMenu();
 
-	int One_message();
 	int All_message();
 
 };

@@ -59,7 +59,9 @@ int Menu::UserMenu()
         switch (choice)
         {
         case 1:
-            One_message();
+            cout << "Выберите какому пользователю хотите написать сообщение" << endl;
+            Chat chat;
+            chat.User_Choice();
             break;
         case 2:
             All_message();
@@ -76,14 +78,6 @@ int Menu::UserMenu()
             break;
         }
     } while (!exit);
-    return 0;
-}
-
-int Menu::One_message()
-{
-    cout << "Выберите какому пользователю хотите написать сообщение" << endl;
-    Chat chat;
-    chat.User_Choice();
     return 0;
 }
 
