@@ -21,7 +21,7 @@ private:
     void LoadCredentials();
     void LoadUserInfo();
     void SaveCredentials();
-    void SaveUserInfo(const string& login, const string& nickname, const string& name);
+    void SaveUserInfo(const string& nickname, const string& name);
 
 public:
     void Authorization();

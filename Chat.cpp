@@ -1,21 +1,5 @@
 #include "Chat.h"
 
-void Chat::Users()
-{
-	ifstream name("Name.txt");
-	if (!name.is_open())
-	{
-		cerr << "Ошибка: не удалось открыть файл в функ Users";
-		return;
-	}
-
-	string All_names;
-	while (getline(name, All_names))
-	{
-		cout << All_names << endl;
-	}
-}
-
 void Chat::Print_All_message()
 {
 	vector<string> messages;
@@ -62,10 +46,10 @@ void Chat::Send_All_message()
 void Chat::User_Choice()
 {
 	vector<string> Users;
-	ifstream name("Name.txt", ios::in);
+	ifstream name("user_info.txt", ios::in);
 	if (!name.is_open())
 	{
-		cerr << "Ошибка: не удалось открыть файл User_Choice" << endl;
+		cerr << "Ошибка: не удалось открыть файл!" << endl;
 		return;
 	}
 
@@ -75,6 +59,10 @@ void Chat::User_Choice()
 		Users.push_back(line);
 	}
 	name.close();
+	if (Users.empty())
+	{
+		cerr << "Ошибка: список пользователей пуст." << endl;
+	}
 
 	cout << "Имена пользователей:" << endl;
 
@@ -86,14 +74,17 @@ void Chat::User_Choice()
 	}
 
 	int choice;
-	cout << "Выберите имя пользователя: ";
+	cout << "Выберите пользователя с кем хотите начать чат (1 - " << Users.size() << "): ";
 	cin >> choice;
-	if (choice < 1 || choice > Users.size())
+
+	if (cin.fail() || choice < 1 || choice > Users.size())
 	{
+		cin.clear();
+		cin.ignore();
 		cerr << "Ошибка: такого пользователя не существует" << endl;
 		return;
 	}
 
 	string selectedUser = Users[choice - 1];
-	cout << "Имя пользователя, которого вы выбрали: " << selectedUser << endl;
+	cout << "Вы выбрали пользователя: " << selectedUser << endl;
 }

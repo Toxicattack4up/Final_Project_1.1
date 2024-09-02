@@ -62,7 +62,7 @@ void Account::SaveCredentials()
     }
 }
 
-void Account::SaveUserInfo(const string& login, const string& nickname, const string& name)
+void Account::SaveUserInfo(const string& nickname, const string& name)
 {
     ofstream user_info_file("user_info.txt", ios::app);
 
@@ -72,7 +72,7 @@ void Account::SaveUserInfo(const string& login, const string& nickname, const st
         return;
     }
 
-    user_info_file << login << " " << nickname << " " << name << endl;
+    user_info_file << nickname << " " << name << endl;
 
     user_info_file.close();
 }
@@ -222,7 +222,7 @@ void Account::Registration()
     try
     {
         SaveCredentials();
-        SaveUserInfo(login, nickname, name);
+        SaveUserInfo(nickname, name);
     }
     catch (const exception& e)
     {
