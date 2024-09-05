@@ -52,7 +52,7 @@ void Chat::User_Choice()
 		cerr << "Ошибка: не удалось открыть файл!" << endl;
 		return;
 	}
-
+	
 	string line;
 	while (getline(name, line))
 	{

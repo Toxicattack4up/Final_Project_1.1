@@ -2,6 +2,7 @@
 #include "Account.h"
 #include "Chat.h"
 #include <iostream>
+#include <windows.h>
 
 //Условия задачи, создать чат со следующими параметрами
 //1. Консольная программа
@@ -14,6 +15,8 @@
 
 int main()
 {
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
     Menu menu;
     menu.RunMenu();
 }

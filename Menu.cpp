@@ -11,6 +11,7 @@ int Menu::RunMenu()
         cout << "1. Вход" << endl;
         cout << "2. Регистрация" << endl;
         cout << "3. Выход" << endl;
+        cout << "Меню №: ";
         cin >> choice;
 
         switch (choice)
@@ -54,26 +55,31 @@ int Menu::UserMenu()
         cout << "2. Сообщения для всех пользователей" << endl;
         cout << "3. Посмотреть свои чаты" << endl;
         cout << "4. Выход" << endl;
+        cout << "Меню №: ";
         cin >> choice;
 
         switch (choice)
         {
         case 1:
+            system("cls");
             cout << "Выберите какому пользователю хотите написать сообщение" << endl;
             Chat chat;
             chat.User_Choice();
             break;
         case 2:
+            system("cls");
             All_message();
             break;
         case 3:
-
+            system("cls");
             break;
         case 4:
+            system("cls");
             exit = true;
             break;
         default:
-            cout << "Вы сделали недопустимый выбор!" << endl;
+            system("cls");
+            cout << "Вы сделали недостойный выбор!" << endl;
             continue;
             break;
         }
@@ -101,14 +107,18 @@ int Menu::All_message()
         switch (choice)
         {
         case 1:
+            system("cls");
             chat.Send_All_message();
             break;
         case 2:
+            system("cls");
             UserMenu();
         case 3:
+            system("cls");
             exit = true;
             break;
         default:
+            system("cls");
             cout << "Вы сделали недопустимый выбор!" << endl;
             continue;
             break;
