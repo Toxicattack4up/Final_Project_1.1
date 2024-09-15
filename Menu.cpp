@@ -1,17 +1,22 @@
 #include "Menu.h"
 #include <iostream>
+#include <cstdlib>  // Для использования system("cls")
 
+using namespace std;
+
+// Главное меню
 int Menu::RunMenu()
 {
     int choice;
     bool exit = false;
+
     do
     {
         cout << "Добро пожаловать!" << endl;
         cout << "1. Вход" << endl;
         cout << "2. Регистрация" << endl;
         cout << "3. Выход" << endl;
-        cout << "Меню №: ";
+        cout << "Меню: ";
         cin >> choice;
 
         switch (choice)
@@ -21,6 +26,7 @@ int Menu::RunMenu()
             system("cls");
             Account account;
             account.Authorization();
+            system("cls");
             Menu::UserMenu();
             break;
         }
@@ -29,13 +35,14 @@ int Menu::RunMenu()
             system("cls");
             Account account;
             account.Registration();
+            system("cls");
             break;
         }
         case 3:
             exit = true;
             break;
         default:
-            cout << "Вы сделали недопустимый выбор!" << endl;
+            cout << "Недопустимый выбор!" << endl;
             break;
         }
     } while (!exit);
@@ -43,87 +50,84 @@ int Menu::RunMenu()
     return 0;
 }
 
+// Меню пользователя
 int Menu::UserMenu()
 {
     int choice = 0;
     bool exit = false;
+    Chat chat;  // Создаем объект чата для взаимодействия
+
     do
     {
-        cout << " " << endl;
-        cout << "Выберите что хотите сделать" << endl;
+        cout << "Меню пользователя:" << endl;
         cout << "1. Отправка сообщения конкретному пользователю" << endl;
         cout << "2. Сообщения для всех пользователей" << endl;
         cout << "3. Посмотреть свои чаты" << endl;
         cout << "4. Выход" << endl;
-        cout << "Меню №: ";
+        cout << "Ваш выбор: ";
         cin >> choice;
 
         switch (choice)
         {
         case 1:
             system("cls");
-            cout << "Выберите какому пользователю хотите написать сообщение" << endl;
-            Chat chat;
-            chat.User_Choice();
+            chat.User_Choice();  // Выбор пользователя для отправки сообщения
             break;
         case 2:
             system("cls");
-            All_message();
+            Menu::All_message();  // Вызов меню для общего чата
             break;
         case 3:
             system("cls");
+            chat.ShowUserChats();  // Показать историю чатов
             break;
         case 4:
-            system("cls");
             exit = true;
             break;
         default:
-            system("cls");
-            cout << "Вы сделали недостойный выбор!" << endl;
-            continue;
+            cout << "Недопустимый выбор!" << endl;
             break;
         }
     } while (!exit);
+
     return 0;
 }
 
+// Меню для общего чата
 int Menu::All_message()
 {
     int choice = 0;
     bool exit = false;
+    Chat chat;  // Используем объект чата для взаимодействия
+
     do
     {
-        cout << " " << endl;
-        cout << "Сообщения из общего чата" << endl;
-        Chat chat;
-        chat.Print_All_message();
-
-        cout << "Выберите что нужно сделать: " << endl;
+        cout << "Общий чат:" << endl;
+        chat.Print_All_message();  // Печатаем все сообщения общего чата
+        cout << "Меню:" << endl;
         cout << "1. Написать всем сообщение" << endl;
         cout << "2. Вернуться в предыдущее меню" << endl;
         cout << "3. Выход из приложения" << endl;
+        cout << "Ваш выбор: ";
         cin >> choice;
 
         switch (choice)
         {
         case 1:
             system("cls");
-            chat.Send_All_message();
+            chat.Send_All_message();  // Отправить сообщение в общий чат
             break;
         case 2:
             system("cls");
-            UserMenu();
+            return 0;  // Вернуться в предыдущее меню (меню пользователя)
         case 3:
-            system("cls");
             exit = true;
             break;
         default:
-            system("cls");
-            cout << "Вы сделали недопустимый выбор!" << endl;
-            continue;
+            cout << "Недопустимый выбор!" << endl;
             break;
         }
     } while (!exit);
-    
+
     return 0;
-};
+}
