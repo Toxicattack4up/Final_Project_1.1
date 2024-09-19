@@ -2,21 +2,15 @@
 #include "Account.h"
 #include "Chat.h"
 #include <iostream>
-//#include <windows.h>
-
-//Условия задачи, создать чат со следующими параметрами
-//1. Консольная программа
-//2. Регистрация пользователей - логин, пароль, имя
-//3. Вход в чат по логину и паролю
-//4. Отправка сообщений конкретному пользователю
-//5. Обмен сообщениями между всеми пользователями чата одновременно
-
-//Обязательно надо использовать классы
+#include <Windows.h>
 
 int main()
 {
-    //SetConsoleCP(CP_UTF8);
-    //SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
+    Account account;  // Создаем объект Account
     Menu menu;
-    menu.RunMenu();
+
+    menu.RunMenu(account);  // Передаем объект Account в меню
 }

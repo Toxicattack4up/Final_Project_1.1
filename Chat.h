@@ -3,23 +3,21 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <thread>
 #include <vector>
-#include <locale>
 #include <sstream>
 #include <iomanip>
-#include <filesystem> // Для работы с файловой системой
+#include <filesystem>  // Для работы с файловой системой
+
 
 // проверка русского языка, если мы будем писать на for linux
-using namespace std; 
 namespace fs = std::filesystem;
 
 struct MyStruct
 {
-	string sender;
-	string receiver;
-	string time;
-	string text;
+    std::string sender;
+    std::string receiver;
+    std::string time;
+    std::string text;
 };
 
 class Chat
@@ -28,9 +26,9 @@ public:
     void Print_All_message();
     void Send_All_message();
 
-    void Send_message(const string& sender, const string& receiver);
-    void Read_message(const string& user1, const string& user2);
+    void Send_message(const std::string& fromUser, const std::string& toUser);
+    void Read_message(const std::string& user1, const std::string& user2);
 
-    void ShowUserChats(const string& current_user);
-    void User_Choice(const string& current_user);
+    void ShowUserChats(const std::string& current_user);
+    void User_Choice(const std::string& current_user);
 };
