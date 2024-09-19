@@ -77,59 +77,44 @@ void Account::SaveUserInfo(const string& nickname, const string& name)
     user_info_file.close();
 }
 
-void Account::Authorization()
-{
+void Account::Authorization() {
     LoadCredentials();
-
     string login, password;
     bool validInput = false;
 
-    while (!validInput)
-    {
+    while (!validInput) {
         cout << "Введите логин: "; cin >> login;
-        
-        if (login.empty())
-        {
+
+        if (login.empty()) {
             cerr << "Логин не должен быть пустым!" << endl;
-        }
-        else if (credentials.find(login) == credentials.end())
-        {
+        } else if (credentials.find(login) == credentials.end()) {
             cerr << "Логин не найден! Попробуйте снова." << endl;
-        }
-        else
-        {
-            validInput = true; // Логин прошел все проверки, выход из цикла
+        } else {
+            validInput = true;
         }
     }
 
     validInput = false;
     auto it = credentials.find(login);
 
-    if (it != credentials.end())
-    {
-        while (!validInput)
-        {
+    if (it != credentials.end()) {
+        while (!validInput) {
             cout << "Введите пароль: "; cin >> password;
 
-            if (password.empty())
-            {
+            if (password.empty()) {
                 cerr << "Пароль не должен быть пустым!" << endl;
-                continue; // Возвращаемся в начало цикла
+                continue;
             }
 
-            if (it->second.password == password) // Здесь заменить на сравнение хешей
-            {
+            if (it->second.password == password) {
                 cout << "Вы успешно авторизовались!" << endl;
-                validInput = true; // Устанавливаем флаг, чтобы выйти из цикла
-            }
-            else
-            {
+                current_user = login;  // Устанавливаем текущего пользователя
+                validInput = true;
+            } else {
                 cerr << "Неправильный пароль! Попробуйте снова." << endl;
             }
         }
-    }
-    else
-    {
+    } else {
         cerr << "Логин не найден!" << endl;
     }
 }
@@ -231,4 +216,9 @@ void Account::Registration()
     }
 
     cout << "Вы успешно зарегистрированы!" << endl;
+}
+
+string Account::GetCurrentUser()
+{
+    return current_user;  // Предположим, что вы храните текущий логин пользователя после авторизации
 }

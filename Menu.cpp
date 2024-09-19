@@ -1,11 +1,12 @@
 #include "Menu.h"
 #include <iostream>
 #include <cstdlib>  // Для использования system("cls")
+#include <string>   // Для работы с std::string
 
 using namespace std;
 
 // Главное меню
-int Menu::RunMenu()
+int Menu::RunMenu(Account& account)
 {
     int choice;
     bool exit = false;
@@ -24,17 +25,16 @@ int Menu::RunMenu()
         case 1:
         {
             system("cls");
-            Account account;
-            account.Authorization();
+            account.Authorization();  // Авторизация пользователя
             system("cls");
-            Menu::UserMenu();
+            Menu menu;
+            menu.UserMenu(account);  // Нестатический вызов через объект
             break;
         }
         case 2:
         {
             system("cls");
-            Account account;
-            account.Registration();
+            account.Registration();  // Используем тот же объект account
             system("cls");
             break;
         }
@@ -51,11 +51,13 @@ int Menu::RunMenu()
 }
 
 // Меню пользователя
-int Menu::UserMenu()
+int Menu::UserMenu(Account& account)
 {
     int choice = 0;
     bool exit = false;
     Chat chat;  // Создаем объект чата для взаимодействия
+
+    string current_user = account.GetCurrentUser();  // Получаем текущего пользователя после авторизации
 
     do
     {
@@ -71,15 +73,15 @@ int Menu::UserMenu()
         {
         case 1:
             system("cls");
-            chat.User_Choice();  // Выбор пользователя для отправки сообщения
+            chat.User_Choice(current_user); // Передаем текущего пользователя
             break;
         case 2:
             system("cls");
-            Menu::All_message();  // Вызов меню для общего чата
+            All_message();  // Нестатический вызов через объект
             break;
         case 3:
             system("cls");
-            chat.ShowUserChats();  // Показать историю чатов
+            chat.ShowUserChats(current_user);  // Показать историю чатов с текущим пользователем
             break;
         case 4:
             exit = true;

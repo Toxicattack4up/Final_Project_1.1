@@ -18,6 +18,8 @@ class Account
 {
 private:
     unordered_map<string, User> credentials;
+    string current_user;
+
     void LoadCredentials();
     void LoadUserInfo();
     void SaveCredentials();
@@ -26,4 +28,5 @@ private:
 public:
     void Authorization();
     void Registration();
+    string GetCurrentUser();
 };

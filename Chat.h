@@ -25,12 +25,12 @@ struct MyStruct
 class Chat
 {
 public:
-	void Print_All_message();
-	void Send_All_message();
+    void Print_All_message();
+    void Send_All_message();
 
-	void Send_message(const string& sender, const string& reveicer);
-	void Read_message(const string& user1, const string& user2);
+    void Send_message(const string& sender, const string& receiver);
+    void Read_message(const string& user1, const string& user2);
 
-	void ShowUserChats(const string& current_user);
-	void User_Choice(const string& current_user);
+    void ShowUserChats(const string& current_user);
+    void User_Choice(const string& current_user);
 };
