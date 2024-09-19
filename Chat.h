@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <filesystem> // Для работы с файловой системой
 
-
+// проверка русского языка, если мы будем писать на for linux
 using namespace std; 
 namespace fs = std::filesystem;
 
