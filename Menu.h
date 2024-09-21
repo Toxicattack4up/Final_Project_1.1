@@ -1,14 +1,21 @@
 #pragma once
-
 #include "Account.h"
-#include "Chat.h"
-#include <iostream>
 
+// Класс для управления меню пользователя
 class Menu
 {
 public:
-	int RunMenu(Account& account);
-	int UserMenu(Account& account);
+    // Метод для очистки экрана и чтобы был красивый вывод
+    void ClearScreen();
+    // Метод для запуска основного меню
+    // Возвращает код завершения программы
+    int RunMenu(Account& account);
 
-	int All_message();
+    // Меню для авторизованного пользователя
+    // Возвращает код завершения программы
+    int UserMenu(Account& account);
+
+    // Метод для отображения всех сообщений
+    // Возвращает код завершения программы
+    int ShowAllMessages();
 };

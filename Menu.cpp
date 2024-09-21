@@ -1,11 +1,13 @@
 #include "Menu.h"
+#include "Chat.h"
 #include <iostream>
-#include <cstdlib>  // Для использования system("cls")
-#include <string>   // Для работы с std::string
+#include <string>
 
-using namespace std;
+void Menu::ClearScreen()
+{
+    std::cout << std::string(50, '\n');
+}
 
-// Главное меню
 int Menu::RunMenu(Account& account)
 {
     int choice;
@@ -13,36 +15,32 @@ int Menu::RunMenu(Account& account)
 
     do
     {
-        cout << "Добро пожаловать!" << endl;
-        cout << "1. Вход" << endl;
-        cout << "2. Регистрация" << endl;
-        cout << "3. Выход" << endl;
-        cout << "Меню: ";
-        cin >> choice;
+        ClearScreen();
+        std::cout << "==========================" << std::endl;
+        std::cout << "Добро пожаловать!" << std::endl;
+        std::cout << "1. Вход" << std::endl;
+        std::cout << "2. Регистрация" << std::endl;
+        std::cout << "3. Выход" << std::endl;
+        std::cout << "==========================" << std::endl;
+        std::cout << "Меню: ";
+        std::cin >> choice;
 
         switch (choice)
         {
         case 1:
-        {
-            system("cls");
-            account.Authorization();  // Авторизация пользователя
-            system("cls");
-            Menu menu;
-            menu.UserMenu(account);  // Нестатический вызов через объект
+            account.Authorization();
+            if (!account.GetCurrentUser().empty()) {
+                UserMenu(account);
+            }
             break;
-        }
         case 2:
-        {
-            system("cls");
-            account.Registration();  // Используем тот же объект account
-            system("cls");
+            account.Registration();
             break;
-        }
         case 3:
             exit = true;
             break;
         default:
-            cout << "Недопустимый выбор!" << endl;
+            std::cout << "Недопустимый выбор! Попробуйте снова." << std::endl;
             break;
         }
     } while (!exit);
@@ -50,44 +48,42 @@ int Menu::RunMenu(Account& account)
     return 0;
 }
 
-// Меню пользователя
 int Menu::UserMenu(Account& account)
 {
     int choice = 0;
     bool exit = false;
-    Chat chat;  // Создаем объект чата для взаимодействия
+    Chat chat;
 
-    string current_user = account.GetCurrentUser();  // Получаем текущего пользователя после авторизации
-
+    std::string currentUser = account.GetCurrentUser();
+    ClearScreen();
     do
     {
-        cout << "Меню пользователя:" << endl;
-        cout << "1. Отправка сообщения конкретному пользователю" << endl;
-        cout << "2. Сообщения для всех пользователей" << endl;
-        cout << "3. Посмотреть свои чаты" << endl;
-        cout << "4. Выход" << endl;
-        cout << "Ваш выбор: ";
-        cin >> choice;
+        std::cout << "==========================" << std::endl;
+        std::cout << "Меню пользователя:" << std::endl;
+        std::cout << "1. Отправка сообщения пользователю" << std::endl;
+        std::cout << "2. Сообщения для всех пользователей" << std::endl;
+        std::cout << "3. Посмотреть свои чаты" << std::endl;
+        std::cout << "4. Выход" << std::endl;
+        std::cout << "==========================" << std::endl;
+        std::cout << "Ваш выбор: ";
+        std::cin >> choice;
 
         switch (choice)
         {
         case 1:
-            system("cls");
-            chat.User_Choice(current_user); // Передаем текущего пользователя
+            chat.UserChoice(currentUser);
             break;
         case 2:
-            system("cls");
-            All_message();  // Нестатический вызов через объект
+            ShowAllMessages();
             break;
         case 3:
-            system("cls");
-            chat.ShowUserChats(current_user);  // Показать историю чатов с текущим пользователем
-            break;
+            chat.ShowUserChats(currentUser);
+            continue;
         case 4:
             exit = true;
             break;
         default:
-            cout << "Недопустимый выбор!" << endl;
+            std::cout << "Недопустимый выбор! Попробуйте снова." << std::endl;
             break;
         }
     } while (!exit);
@@ -95,38 +91,37 @@ int Menu::UserMenu(Account& account)
     return 0;
 }
 
-// Меню для общего чата
-int Menu::All_message()
+int Menu::ShowAllMessages()
 {
     int choice = 0;
     bool exit = false;
-    Chat chat;  // Используем объект чата для взаимодействия
+    Chat chat;
 
     do
     {
-        cout << "Общий чат:" << endl;
-        chat.Print_All_message();  // Печатаем все сообщения общего чата
-        cout << "Меню:" << endl;
-        cout << "1. Написать всем сообщение" << endl;
-        cout << "2. Вернуться в предыдущее меню" << endl;
-        cout << "3. Выход из приложения" << endl;
-        cout << "Ваш выбор: ";
-        cin >> choice;
+        std::cout << "==========================" << std::endl;
+        std::cout << "Общий чат:" << std::endl;
+        chat.PrintAllMessages();
+        std::cout << "==========================" << std::endl;
+        std::cout << "Меню:" << std::endl;
+        std::cout << "1. Написать всем сообщение" << std::endl;
+        std::cout << "2. Вернуться в предыдущее меню" << std::endl;
+        std::cout << "3. Выход из приложения" << std::endl;
+        std::cout << "Ваш выбор: "; std::cin >> choice;
 
         switch (choice)
         {
         case 1:
-            system("cls");
-            chat.Send_All_message();  // Отправить сообщение в общий чат
+            chat.SendMessageToAll();
             break;
         case 2:
-            system("cls");
-            return 0;  // Вернуться в предыдущее меню (меню пользователя)
+            ClearScreen();
+            return 0;
         case 3:
             exit = true;
             break;
         default:
-            cout << "Недопустимый выбор!" << endl;
+            std::cout << "Недопустимый выбор! Попробуйте снова." << std::endl;
             break;
         }
     } while (!exit);

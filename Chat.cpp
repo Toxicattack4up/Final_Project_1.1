@@ -1,136 +1,125 @@
 #include "Chat.h"
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <filesystem>
+#include <ctime>
+#include <vector>
+
+namespace fs = std::filesystem;
+
+Menu menu;
 
 // Функция для вывода всех сообщений из общего чата
-void Chat::Print_All_message() {
-    std::vector<std::string> messages;
-    std::string line;
-
+void Chat::PrintAllMessages() const {
+    menu.ClearScreen();
     std::ifstream all_message("All_message.txt");
-    if (!all_message.is_open()) {
-        std::cerr << "Ошибка: файл не удалось открыть" << std::endl;
+    if (!all_message) {
+        std::cerr << "Ошибка: файл с сообщениями не найден." << std::endl;
         return;
     }
 
-    while (getline(all_message, line)) {
-        messages.push_back(line);
+    std::string line;
+    bool isEmpty = true;
+    while (std::getline(all_message, line)) {
+        std::cout << line << std::endl;
+        isEmpty = false;
     }
-    all_message.close();
 
-    if (messages.empty()) {
+    if (isEmpty) {
         std::cout << "Нет сообщений в общем чате." << std::endl;
-    }
-    else {
-        for (const auto& message : messages) {
-            std::cout << message << std::endl;
-        }
     }
 }
 
 // Функция для отправки сообщения всем пользователям
-void Chat::Send_All_message() {
-    std::string line;
-
-    std::cout << "Введите сообщение всем пользователям: ";
-    std::cin.ignore();
-    std::getline(std::cin, line);
+void Chat::SendMessageToAll() {
+    std::string message;
+    std::cout << "Введите сообщение для всех пользователей: ";
+    std::cin.ignore(); // Игнорируем оставшуюся новую строку после предыдущего ввода
+    std::getline(std::cin, message);
 
     std::ofstream out_message("All_message.txt", std::ios::app);
-    if (!out_message.is_open()) {
-        std::cerr << "Ошибка: не удалось открыть файл" << std::endl;
+    if (!out_message) {
+        std::cerr << "Ошибка: не удалось открыть файл для записи." << std::endl;
         return;
     }
 
-    out_message << line << std::endl;
-    out_message.close();
+    out_message << message << std::endl;
+    std::cout << "Сообщение отправлено всем пользователям!" << std::endl;
 }
 
 // Отправка сообщения конкретному пользователю
-void Chat::Send_message(const std::string& fromUser, const std::string& toUser) {
+void Chat::SendMessage(const std::string& sender, const std::string& receiver) {
     std::string message_text;
     std::cout << "Введите сообщение: ";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Очищаем буфер
+    std::cin.ignore();
     std::getline(std::cin, message_text);
 
-    // Получение текущего времени
-    time_t now = time(0);
-    tm ltm; // Объявляем объект tm, а не указатель
-    localtime_s(&ltm, &now); // Используем безопасную версию localtime_s
-
-    // Формируем строку с датой и временем
     std::ostringstream dateTime;
-    dateTime << std::setw(2) << std::setfill('0') << ltm.tm_mday << "/"
-        << std::setw(2) << std::setfill('0') << ltm.tm_mon + 1 << "/"
-        << ltm.tm_year + 1900 << " "
-        << std::setw(2) << std::setfill('0') << ltm.tm_hour << ":"
-        << std::setw(2) << std::setfill('0') << ltm.tm_min;
+    std::time_t now = std::time(nullptr);
+    std::tm local_tm;
+    localtime_s(&local_tm, &now);  // Используем localtime_s для безопасного получения локального времени
+    dateTime << std::put_time(&local_tm, "%d/%m/%Y %H:%M");
 
-    // Формируем имя файла на основе логинов отправителя и получателя
-    std::string filename = "chat_" + (fromUser < toUser ? fromUser + "_" + toUser : toUser + "_" + fromUser) + ".txt";
+    std::string filename = "chat_" + sender + "_" + receiver + ".txt";
 
-    // Открываем файл для записи
     std::ofstream chat_file(filename, std::ios::app);
-    if (!chat_file.is_open()) {
-        std::cerr << "Ошибка: файл чата не удалось открыть!" << std::endl;
+    if (!chat_file) {
+        std::cerr << "Ошибка: не удалось открыть файл чата." << std::endl;
         return;
     }
 
-    // Записываем сообщение в файл с датой и временем
-    chat_file << "[" << dateTime.str() << "] " << fromUser << ": " << message_text << std::endl;
-    chat_file.close();
-
+    chat_file << "[" << dateTime.str() << "] " << sender << ": " << message_text << std::endl;
     std::cout << "Сообщение отправлено!" << std::endl;
 }
 
+
 // Чтение сообщений между двумя пользователями
-void Chat::Read_message(const std::string& fromUser, const std::string& toUser) {
-    std::string filename = "chat_" + (fromUser < toUser ? fromUser + "_" + toUser : toUser + "_" + fromUser) + ".txt";
+void Chat::ReadMessages(const std::string& user1, const std::string& user2) const {
+    std::string filename = "chat_" + user1 + "_" + user2 + ".txt";
 
     std::ifstream chat_file(filename);
-    if (!chat_file.is_open()) {
-        std::cerr << "Чат с этим пользователем пуст или файл не найден." << std::endl;
+    if (!chat_file) {
+        std::cerr << "Чат с пользователем " << user2 << " пуст или файл не найден." << std::endl;
         return;
     }
 
+    std::cout << "Чат с пользователем " << user2 << ":" << std::endl;
     std::string line;
-    std::cout << "Чат с пользователем " << toUser << ":" << std::endl;
-    while (getline(chat_file, line)) {
+    while (std::getline(chat_file, line)) {
         std::cout << line << std::endl;
     }
-    chat_file.close();
 }
 
-void Chat::ShowUserChats(const std::string& current_user) {
-    // Папка, где хранятся файлы чатов
-    std::string chat_directory = ".";  // В текущей папке
-
+// Отображение всех чатов текущего пользователя
+void Chat::ShowUserChats(const std::string& current_user) const {
+    menu.ClearScreen();
+    std::string chat_directory = ".";
     bool found = false;
 
     std::cout << "Ваши чаты:" << std::endl;
 
-    // Проходим по всем файлам в директории
     for (const auto& entry : fs::directory_iterator(chat_directory)) {
         std::string filename = entry.path().filename().string();
 
-        // Проверяем, что файл начинается с "chat_" и содержит имя текущего пользователя
         if (filename.find("chat_") == 0 &&
-            (filename.find(current_user + "_") != std::string::npos || filename.find("_" + current_user) != std::string::npos)) {
-
+            (filename.find(current_user + "_") != std::string::npos ||
+                filename.find("_" + current_user) != std::string::npos)) {
             found = true;
             std::cout << "Чат: " << filename << std::endl;
 
-            // Открываем файл чата для чтения
             std::ifstream chat_file(entry.path());
-            if (!chat_file.is_open()) {
-                std::cerr << "Ошибка: не удалось открыть файл чата " << filename << std::endl;
+            if (!chat_file) {
+                std::cerr << "Ошибка: не удалось открыть файл чата." << std::endl;
                 continue;
             }
 
             std::string line;
-            while (getline(chat_file, line)) {
+            while (std::getline(chat_file, line)) {
                 std::cout << line << std::endl;
             }
 
-            chat_file.close();
             std::cout << "-----------------------" << std::endl;
         }
     }
@@ -141,19 +130,19 @@ void Chat::ShowUserChats(const std::string& current_user) {
 }
 
 // Выбор пользователя для отправки сообщения
-void Chat::User_Choice(const std::string& current_user) {
+void Chat::UserChoice(const std::string& current_user) {
     std::vector<std::string> users;
-    std::ifstream name("user_info.txt");
-    if (!name.is_open()) {
-        std::cerr << "Ошибка: не удалось открыть файл!" << std::endl;
+    std::ifstream user_file("user_info.txt");
+
+    if (!user_file) {
+        std::cerr << "Ошибка: не удалось открыть файл с пользователями." << std::endl;
         return;
     }
 
     std::string line;
-    while (std::getline(name, line)) {
+    while (std::getline(user_file, line)) {
         users.push_back(line);
     }
-    name.close();
 
     if (users.empty()) {
         std::cerr << "Ошибка: список пользователей пуст." << std::endl;
@@ -161,30 +150,22 @@ void Chat::User_Choice(const std::string& current_user) {
     }
 
     std::cout << "Доступные пользователи:" << std::endl;
-
-    size_t i = 1;
-    for (const auto& user : users) {
-        std::cout << i << ". " << user << std::endl;
-        i++;
+    for (size_t i = 0; i < users.size(); ++i) {
+        std::cout << i + 1 << ". " << users[i] << std::endl;
     }
 
-    size_t choice;
+    int choice;
     std::cout << "Выберите пользователя для чата (1 - " << users.size() << "): ";
     std::cin >> choice;
 
-    if (std::cin.fail() || choice < 1 || choice > users.size()) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cerr << "Ошибка: такого пользователя не существует." << std::endl;
+    if (choice < 1 || choice > static_cast<int>(users.size())) {
+        std::cerr << "Ошибка: некорректный выбор." << std::endl;
         return;
     }
+    menu.ClearScreen();
+    std::string selected_user = users[choice - 1];
+    std::cout << "Вы выбрали пользователя: " << selected_user << std::endl;
 
-    std::string selectedUser = users[choice - 1];
-    std::cout << "Вы выбрали пользователя: " << selectedUser << std::endl;
-
-    // Чтение существующих сообщений
-    Read_message(current_user, selectedUser);
-
-    // Отправка нового сообщения
-    Send_message(current_user, selectedUser);
+    ReadMessages(current_user, selected_user);
+    SendMessage(current_user, selected_user);
 }
